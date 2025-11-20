@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoadEye AI - Advanced Traffic Monitoring System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            color: var(--secondary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--secondary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
+            color: white;
+            padding: 10rem 2rem 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .hero-buttons .btn {
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .hero-image {
+            margin-top: 3rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-image img {
+            width: 100%;
+            display: block;
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            background-color: var(--secondary);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            background-color: var(--light);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .benefit-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+        }
+
+        .benefit-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .benefit-content p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* Demo Section */
+        .demo-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-tabs {
+            display: flex;
+            background-color: var(--primary);
+        }
+
+        .demo-tab {
+            padding: 1rem 2rem;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .demo-tab.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-bottom-color: var(--secondary);
+        }
+
+        .demo-content {
+            padding: 2rem;
+            display: none;
+        }
+
+        .demo-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .location-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Tutorials Section */
+        .tutorials {
+            background-color: var(--light);
+        }
+
+        .tutorial-steps {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tutorial-step {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .tutorial-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            background-color: var(--secondary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-right: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            flex-grow: 1;
+        }
+
+        .step-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .step-content p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* demo Section */
+        .download {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
+            color: white;
+        }
+
+        .download h2 {
+            color: white;
+        }
+
+        .download p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .download-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .app-details h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-details p {
+            opacity: 0.8;
+            margin-bottom: 0;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(52, 152, 219, 0.4);
+            background: #2980b9;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-col ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--secondary);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .demo-tabs {
+                flex-direction: column;
+            }
+
+            .location-group {
+                grid-template-columns: 1fr;
+            }
+
+            .tutorial-step {
+                flex-direction: column;
+            }
+
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-traffic-light"></i>
+                <span>RoadEye AI</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#features" class="active">Features</a></li>
+                    <li><a href="#benefits">Benefits</a></li>
+                    <!-- <li><a href="#demo">Demo</a></li> -->
+                    <li><a href="#tutorials">Tutorials</a></li>
+                    <li><a href="#download">Download</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <!-- <a href="#" class="btn btn-outline">Login</a>
+                <a href="#" class="btn btn-primary">Register</a> -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Advanced AI-Powered Traffic Monitoring</h1>
+            <p>RoadEye AI uses cutting-edge machine learning to classify HMV and LMV vehicles, detect traffic violations, and monitor restricted zones in real-time. Transform your traffic management system with our intelligent solution.</p>
+            <div class="hero-buttons">
+                <a href="#download" class="btn btn-primary">Download App</a>
+                <!-- <a href="#demo" class="btn btn-outline">Live Demo</a> -->
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="RoadEye AI Dashboard">
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Powerful Features</h2>
+                <p>RoadEye AI offers a comprehensive suite of tools for effective traffic monitoring and violation detection</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI Processing</h3>
+                    <p>Advanced machine learning algorithms process video feeds in real-time to accurately classify vehicles as HMV or LMV and detect traffic violations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Violation Detection</h3>
+                    <p>Automatically identify and record traffic violations with detailed timestamps, locations, and vehicle classification data.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <h3>Restricted Zones</h3>
+                    <p>Define and monitor restricted areas with customizable rules for different vehicle types and time periods.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <h3>Smart Settings</h3>
+                    <p>Customize notification preferences, auto-refresh intervals, and system behavior to match your operational needs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>Multiple Input Sources</h3>
+                    <p>Process video from uploaded files, IP cameras, or YouTube streams with flexible configuration options.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Geolocation Tracking</h3>
+                    <p>Pinpoint violation locations with precise latitude and longitude coordinates for accurate incident reporting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="benefits">
+        <div class="container">
+            <div class="section-title">
+                <h2>Key Benefits</h2>
+                <p>Discover how RoadEye AI transforms traffic management and enforcement</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Enhanced Safety</h3>
+                        <p>Reduce accidents and improve road safety by automatically detecting and reporting traffic violations in real-time.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Data-Driven Decisions</h3>
+                        <p>Gain valuable insights into traffic patterns and violation hotspots to optimize enforcement resources.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Cost Efficiency</h3>
+                        <p>Automate monitoring processes, reducing the need for manual supervision and cutting operational costs.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Real-Time Alerts</h3>
+                        <p>Receive instant notifications for violations with configurable sound, vibration, and visual alerts.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Scalable Solution</h3>
+                        <p>Easily scale from monitoring a single intersection to managing an entire city's traffic network.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>User-Friendly Interface</h3>
+                        <p>Intuitive design ensures quick adoption with minimal training required for traffic personnel.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+ <!--   <section id="demo" class="demo">
+        <div class="container">
+            <div class="section-title">
+                <h2>Interactive Demo</h2>
+                <p>Experience RoadEye AI's capabilities with our simulated demo interface</p>
+            </div>
+            <div class="demo-container">
+                <div class="demo-tabs">
+                    <div class="demo-tab active" data-tab="upload">Upload Video</div>
+                    <div class="demo-tab" data-tab="ip-camera">IP Camera</div>
+                    <div class="demo-tab" data-tab="youtube">YouTube</div>
+                </div>
+                <div class="demo-content active" id="upload-content">
+                    <h3>Upload Video File</h3>
+                    <p>Select a video from your device for AI processing</p>
+                    <div class="form-group">
+                        <label for="video-file">Select Video File</label>
+                        <input type="file" id="video-file" class="form-control" accept="video/*">
+                    </div>
+                    <div class="form-group">
+                        <label>Camera Location</label>
+                        <input type="text" class="form-control" placeholder="Camera ID" value="CAMERA_001">
+                    </div>
+                    <div class="location-group">
+                        <div class="form-group">
+                            <label>Latitude</label>
+                            <input type="text" class="form-control" value="18.5204">
+                        </div>
+                        <div class="form-group">
+                            <label>Longitude</label>
+                            <input type="text" class="form-control" value="73.8567">
+                        </div>
+                    </div>
+                    <div class="demo-buttons">
+                        <button class="btn btn-primary">Upload & Process Video</button>
+                    </div>
+                </div>
+                <div class="demo-content" id="ip-camera-content">
+                    <h3>Connect IP Camera</h3>
+                    <p>Stream from network cameras for real-time monitoring</p>
+                    <div class="form-group">
+                        <label for="ip-address">IP Address</label>
+                        <input type="text" id="ip-address" class="form-control" placeholder="192.168.1.100">
+                    </div>
+                    <div class="form-group">
+                        <label for="port">Port</label>
+                        <input type="text" id="port" class="form-control" value="8080">
+                    </div>
+                    <div class="form-group">
+                        <label for="stream-type">Stream Type</label>
+                        <select id="stream-type" class="form-control">
+                            <option>MJPEG (IP Webcam)</option>
+                            <option>RTSP</option>
+                            <option>HTTP Stream</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="auth-required">
+                        <label for="auth-required">Requires Authentication</label>
+                    </div>
+                    <div class="demo-buttons">
+                        <button class="btn btn-primary">Test Connection</button>
+                        <button class="btn btn-outline">Start Camera Processing</button>
+                    </div>
+                </div>
+                <div class="demo-content" id="youtube-content">
+                    <h3>Process YouTube Video</h3>
+                    <p>Analyze traffic from YouTube video streams</p>
+                    <div class="form-group">
+                        <label for="youtube-url">YouTube URL</label>
+                        <input type="text" id="youtube-url" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
+                    </div>
+                    <div class="form-group">
+                        <label>Camera Location</label>
+                        <input type="text" class="form-control" placeholder="Camera ID" value="CAMERA_001">
+                    </div>
+                    <div class="location-group">
+                        <div class="form-group">
+                            <label>Latitude</label>
+                            <input type="text" class="form-control" value="18.5204">
+                        </div>
+                        <div class="form-group">
+                            <label>Longitude</label>
+                            <input type="text" class="form-control" value="73.8567">
+                        </div>
+                    </div>
+                    <div class="demo-buttons">
+                        <button class="btn btn-primary">Process YouTube Video</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> --
+
+    <!-- Tutorials Section -->
+    <section id="tutorials" class="tutorials">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Follow these simple steps to get started with RoadEye AI</p>
+            </div>
+            <div class="tutorial-steps">
+                <div class="tutorial-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Create Your Account</h3>
+                        <p>Register with your email address and verify your account to access the RoadEye AI system. Our secure authentication ensures your data remains protected.</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Configure Your Settings</h3>
+                        <p>Customize notification preferences, set up auto-refresh intervals, and define your monitoring parameters to match your operational requirements.</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Connect Video Sources</h3>
+                        <p>Set up your video inputs by uploading files, connecting IP cameras, or providing YouTube URLs. Configure camera locations with precise GPS coordinates.</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Monitor & Analyze</h3>
+                        <p>Watch as RoadEye AI processes video feeds in real-time, classifying vehicles as HMV or LMV and detecting violations in restricted zones.</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Review Violations</h3>
+                        <p>Access detailed violation records with timestamps, locations, and vehicle classification data. Export reports for further analysis or enforcement actions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download">
+        <div class="container">
+            <div class="section-title">
+                <h2>Download RoadEye AI</h2>
+                <p>Get started with our advanced traffic monitoring solution today</p>
+            </div>
+            <div class="download-card">
+                <div class="download-info">
+                    <div class="app-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="app-details">
+                        <h3>RoadEye AI</h3>
+                        <p>Version 2.1.5 | 48 MB</p>
+                    </div>
+                </div>
+                <p>Download the APK file and install RoadEye AI on your Android device. Transform your traffic monitoring capabilities with our cutting-edge AI technology.</p>
+                <a href="https://drive.google.com/file/d/1h-Lx6nqpw4j-ELlarb9dewF9zjWTz29K/view?usp=sharing" class="download-btn">
+                    <i class="fas fa-download"></i> Download APK
+                </a>
+                <div class="installation-steps" style="margin-top: 2rem; text-align: left; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px;">
+                    <h4 style="margin-bottom: 0.5rem;">Installation Instructions:</h4>
+                    <ol style="padding-left: 1.5rem; opacity: 0.9;">
+                        <li>Download the APK file to your Android device</li>
+                        <li>Enable "Install from Unknown Sources" in Settings > Security</li>
+                        <li>Open the downloaded file and follow installation prompts</li>
+                        <li>Launch RoadEye AI and create your account</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>RoadEye AI</h3>
+                <p>Advanced AI-powered traffic monitoring and violation detection system for modern cities.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#benefits">Benefits</a></li>
+                    <!-- <li><a href="#demo">Demo</a></li> -->
+                    <li><a href="#tutorials">Tutorials</a></li>
+                    <li><a href="#download">Download</a></li>
+                </ul>
+            </div>
+            <!-- <div class="footer-col">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div> -->
+            <div class="footer-col">
+                <h3>Contact Info</h3>
+                <ul>
+                    <li><i class="fas fa-envelope"></i> sagarmaheshwari650@gmail.com</li>
+                    <li><i class="fas fa-phone"></i> 8955650560</li>
+                    <!-- <li><i class="fas fa-map-marker-alt"></i> 123 Tech Park, Innovation City</li> -->
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 RoadEye AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality for demo section
+        document.querySelectorAll('.demo-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.demo-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Update active nav link on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
